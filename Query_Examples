@@ -1,0 +1,73 @@
+1. Find the names of the companies supplying drugs for prescription of Patient John Collins. 
+
+Select d.supplierName.SupplyCompany, ph.Prescribe.pid.PatientName  
+From DrugOrder_t d,PrescriptionHandler_t ph  
+Where ph.Prescribe.pid.PatientName = 'John Collins'  
+AND d.drugcode.DrugCode = ph.dcode.DrugCode; 
+
+2.  Find the name, phone number and refill date for patient who have more than one refill. 
+
+Select ph.Prescribe.pid.PatientName, ph.Prescribe.pid.PhoneNo, ph.RefillDate,ph.refillsLeft()  
+From PrescriptionHandler_t ph  
+Where ph.refillsLeft(5)>1  
+Order by ph.RefillDate; 
+
+3. Find bill Numbers and patient names for card payment that were paid by Humana Insurance company in the month of April 2020. 
+
+Select cd.BillNo, ph.Prescribe.pid.PatientName, cd.billDate  
+From PrescriptionHandler_t ph, Card_Payment_t cd  
+Where ph.Prescribe.pid.insurid.insuranceName = 'Humana'   
+AND cd.billDate >='01-Apr-2020' And cd.billDate<='30-Apr-2020';
+
+4. Find Patients and Account IDs that had drugs supplied by Apotex. 
+
+Select ph.Prescribe.pid.PatientName, pa.AccountId  
+From DrugOrder_t d,PrescriptionHandler_t ph, Patient_Account_t pa  
+Where d.supplierName.SupplyCompany= 'Apotex'  
+AND d.drugcode.DrugCode = ph.dcode.DrugCode  
+AND ph.Prescribe.pid.PatientId = pa.pid.PatientId; 
+
+5. Find patientname and the relative prescribed drugname for those patients that have a prescription for a medicine that needs to be restocked. 
+
+Select ph.drugQuantity, ph.dcode.DrugQty, ph.Prescribe.pid.PatientName, ph.dcode.DrugName  
+From PrescriptionHandler_t ph  
+Where ph.drugQuantity > ph.dcode.DrugQty; 
+
+6. Find all PatientNames and the relevant prescriptionID that didn’t have a drug from Sanofi Pasteur. 
+
+Select ph.Prescribe.pid.PatientName, ph.Prescribe.prescriptionID    
+From DrugOrder_t d,PrescriptionHandler_t ph   
+Where d.supplierName.SupplyCompany!= 'Sanofi Pasteur'  
+AND d.drugcode.DrugCode = ph.dcode.DrugCode;    
+
+7. Find PatientNames that had a perscritpion for Metformin. 
+
+Select ph.Prescribe.pid.PatientName, ph.dcode.DrugName   
+From PrescriptionHandler_t ph   
+Where ph.dcode.DrugName = 'Metformin'; 
+
+8. Find the billing address for patients made payment using debit card. 
+
+Select cd.CardType, cd.pid.PatientName, pa.BillingAdress  
+From Card_Payment_t cd, Patient_Account_t pa  
+Where cd.CardType = 'Debit'  
+AND cd.pid.PatientId = pa.pid.PatientId; 
+
+9. Find the patient name , bill number and date for cash payment over 50 dollars.(Overriding method) 
+
+Select c.pid.PatientName,c.BillNo, c.BillDate, round(c.CalculatePatientPay(),2) 
+From Cash_Payment_t c 
+Where c.CalculatePatientPay()>50; 
+
+10. Compare prices of other drug orders to the price of an order of acetaminophen. Listed from lowest  price to highest.
+ 
+Select d.drugcode.DrugName, d.supplierName.SupplyCompany,d.price, 
+d.sortOrder(DrugOrder('5565543', (select ref(m) from Medicine_Stock_t m where m.DrugCode = '3816452222'), 5, 5303, '15-Jul-2020', (select ref(s) from Supplier_t s where s.SupplyCompany = 'Sanofi Pasteur'))) 
+From DrugOrder_t d 
+Order by Value(d); 
+
+11. Find drug name in the prescription for patients over 35 years old . (using map method) 
+
+Select ph.Prescribe.pid.mapPatient() ,ph.Prescribe.pid. PatientName, ph.dcode.DrugName  from PrescriptionHandler_t ph   
+Where ph.Prescribe.pid.mapPatient() > 35   
+Order by ph.Prescribe.pid.mapPatient(); 
