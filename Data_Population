@@ -1,0 +1,49 @@
+insert into Insurance_t values(Insurance('3847343255', 'PharmaAID', '6477056399', 32));  
+insert into Insurance_t values(Insurance('43432434', 'Rexall+', '4163563116', 43));  
+insert into Insurance_t values(Insurance('46556555', 'Humana', '4165551232', 54)); 
+insert into Insurance_t values(Insurance('3321134', 'Anthem', '6473552192', 12));  
+
+insert into Patient_t values(Patient('6838123233', 'Rick Astley', 1983, 'M', '4169276542', (select ref(i) from Insurance_t i where i.InsuranceID = '3847343255')));  
+insert into Patient_t values(Patient('444332312', 'John Collins', 1975, 'M', '4163554642', (select ref(i) from Insurance_t i where i.InsuranceID = '43432434')));  
+insert into Patient_t values(Patient('343434323', 'Peter Parker', 1995, 'M', '4163819322', (select ref(i) from Insurance_t i where i.InsuranceID = '3321134')));   
+insert into Patient_t values(Patient('75748333', 'Maurice Loveheart', 1981, 'F', '4160992444', (select ref(i) from Insurance_t i where i.InsuranceID = '46556555')));
+
+insert into Patient_Account_t values(Patient_Account(1342657322, (select ref(p) from Patient_t p where p.PatientID = '6838123233'), '245 Eisenhower Crescent ', '245 Eibenhower Crescent ')); 
+insert into Patient_Account_t values(Patient_Account('55833636', (select ref(p) from Patient_t p where p.PatientID = '444332312'), '45 Harlove Road ', '82 Dove Street ')); 
+insert into Patient_Account_t values(Patient_Account('3477767', (select ref(p) from Patient_t p where p.PatientID = '343434323'), '83 Humber Avenue ', '83 Humber Avenue ')); 
+insert into Patient_Account_t values(Patient_Account('164223', (select ref(p) from Patient_t p where p.PatientID = '75748333'), '75 Brampton Road ', '75 Brampton Road '));
+
+Insert into Card_Payment_t values(Card_Payment('132324',(select ref(p) from Patient_t p where p.PatientID = '6838123233'), 233.45, '10-Mar-2020', 32, 'Credit', 450566473838));  
+Insert into Card_Payment_t values(Card_Payment('234555',(select ref(p) from Patient_t p where p.PatientID = '444332312'), 99.52, '1-Jan-2020', 43, 'Debit', '949473722347'));  
+Insert into Card_Payment_t values(Card_Payment('32651',(select ref(p) from Patient_t p where p.PatientID = '343434323'), 56.22, '20-Feb-2020', 12, 'Debit', '383846632887'));  
+Insert into Card_Payment_t values(Card_Payment('573778',(select ref(p) from Patient_t p where p.PatientID = '75748333'), 122.13, '27-Apr-2020', 54, 'Credit', '927555523124'));
+
+Insert into Cash_Payment_t values(Cash_Payment('110032020',(select ref(p) from Patient_t p where p.PatientID = '6838123233'), 343.45, '20-Mar-2020', 32, 250, 10));  
+Insert into Cash_Payment_t values(Cash_Payment('18042020',(select ref(p) from Patient_t p where p.PatientID = '343434323'), 30.45, '18-Apr-2020', 12 , 28, 5));  
+Insert into Cash_Payment_t values(Cash_Payment('20052020',(select ref(p) from Patient_t p where p.PatientID = '75748333'), 123.8, '20-May-2020', 54, 60, 5));  
+Insert into Cash_Payment_t values(Cash_Payment('5032020',(select ref(p) from Patient_t p where p.PatientID = '444332312'), 102.5, '5-Mar-2020',43, 60, 5));  
+
+insert into Medicine_Stock_t values(Medicine_Stock('6327272244', 'Metformin', 1323.32, 13)); 
+insert into Medicine_Stock_t values(Medicine_Stock('3816452222', 'Acetaminophen', 237.98, 25)); 
+insert into Medicine_Stock_t values(Medicine_Stock('8783111133', 'Amoxicillin', 373.43, 52)); 
+Insert into Medicine_Stock_t values(Medicine_Stock('6354427262', 'ibuprofen', 572.43, 38)); 
+
+Insert into Prescription_t values(Prescription( '8383524', (select ref(p) from Patient_t p where p.PatientID = '6838123233'))); 
+Insert into Prescription_t values(Prescription( '4522234', (select ref(p) from Patient_t p where p.PatientID = '444332312'))); 
+Insert into Prescription_t values(Prescription( '7462653', (select ref(p) from Patient_t p where p.PatientID = '343434323'))); 
+Insert into Prescription_t values(Prescription( '1288634', (select ref(p) from Patient_t p where p.PatientID = '75748333')));
+
+Insert into PrescriptionHandler_t values (PrescriptionHandler('00000001',(select ref(pr) from Prescription_t pr where pr.PrescriptionID = '8383524'), (select ref(m) from Medicine_Stock_t m where m.DrugCode = '6327272244'), 12, 12, '12-MAY-2020')); 
+Insert into PrescriptionHandler_t values( PrescriptionHandler('00000002',(select ref(pr) from Prescription_t pr where pr.PrescriptionID = '4522234'), (select ref(m) from Medicine_Stock_t m where m.DrugCode = '3816452222'), 32, 25, '28-Feb-2020')); 
+Insert into PrescriptionHandler_t values(PrescriptionHandler('00000003',(select ref(pr) from Prescription_t pr where pr.PrescriptionID = '7462653'), (select ref(m) from Medicine_Stock_t m where m.DrugCode = '8783111133'), 15, 5, '13-Mar-2020')); 
+Insert into PrescriptionHandler_t values(PrescriptionHandler('00000004',(select ref(pr) from Prescription_t pr where pr.PrescriptionID = '1288634'), (select ref(m) from Medicine_Stock_t m where m.DrugCode = '6354427262'), 11, 8, '14-Feb-2020')); 
+
+Insert Into Supplier_t values(Supplier('Sanofi Pasteur', '1755 Steeles Ave', 'SN10077', '4166672700')); 
+Insert Into Supplier_t values(Supplier('Apotex', '150 Signet Dr ', 'AN67821', '8002684623')); 
+Insert Into Supplier_t values(Supplier('Pfizer Canada', '110 Maple Dr', 'SI07671', '4164986037')); 
+
+Insert into DrugOrder_t values(DrugOrder('5565543', (select ref(m) from Medicine_Stock_t m where m.DrugCode = '3816452222'), 5, 5303, '15-Jul-2020', (select ref(s) from Supplier_t s where s.SupplyCompany = 'Sanofi Pasteur'))); 
+Insert into DrugOrder_t values(DrugOrder('8725384', (select ref(m) from Medicine_Stock_t m where m.DrugCode = '8783111133'), 15, 6200, '31-Oct-2020', (select ref(s) from Supplier_t s where s.SupplyCompany = 'Apotex'))); 
+Insert into DrugOrder_t values(DrugOrder('4322347', (select ref(m) from Medicine_Stock_t m where m.DrugCode = '6327272244'), 23, 800, '10-Sep-2020', (select ref(s) from Supplier_t s where s.SupplyCompany = 'Pfizer'))); 
+
+
