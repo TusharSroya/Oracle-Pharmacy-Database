@@ -1,0 +1,99 @@
+//Create Type Bodies
+
+//MAP METHOD
+create type body Patient as map member function mapPatient return integer
+is 
+begin
+return 2020 - self.BirthYear;
+end;
+end;
+​
+
+create type body PrescriptionHandler as member function refillsLeft return number
+is 
+begin
+Return self.DrugQuantity - self.Refills ;
+end; 
+end;
+​
+
+create type body Bill as member function getInsuranceReduce return number​
+is
+begin 
+return self.TotalPrice*self.insuranceOff;
+end;
+member function calculatePatientPay return number
+is
+begin
+return self.TotalPrice*(1-self.InsuranceOff/100);
+end;
+end;
+​
+
+create type body Cash_Payment as overriding member function calculatePatientPay return number​
+is
+begin 
+return self.TotalPrice*(1-InsuranceOff/100)*(1-CashPercentageOff/100);​
+end;
+ member function getChange return number​
+is
+begin 
+ return self.CashReceived - self.TotalPrice*(1-InsuranceOff/100)*(1-CashPercentageOff/100);​
+end;
+end;
+​
+
+create type body Medicine_Stock as member function getDrugQty(drugCode in varchar2) return integer
+is 
+drugNum integer := 0;
+begin 
+select self.DrugQty into drugNum from Medicine_Stock_t
+where self.DrugCode = drugCode;
+return self.DrugQty;
+end;
+member procedure updateStock(drugCode in varchar2, quantity in number) 
+is
+drugQ integer := 0;
+begin
+self.DrugQty := quantity;
+select self.DrugQty into drugQ from Medicine_Stock_t
+where self.DrugCode = drugCode;
+DBMS_OUTPUT.PUT_LINE(self.DrugQty);
+end;
+end;
+​
+
+//Order Method
+create type body DrugOrder as member function getDiscount return number​
+is 
+begin
+if self.OrderQty >10 then
+return self.Price*self.OrderQty*0.05;
+end if;
+end;
+member function getTotalPrice return number
+is
+begin
+if self.getDiscount > 0 then
+return self.Price*self.OrderQty*0.95;
+else 
+return self.Price*self.OrderQty;
+end if;
+end;
+order member function sortOrder(orders in DrugOrder) return integer​
+is 
+result integer := 0;
+begin
+if self.Price < orders.Price then
+result := -1;
+else
+if self.Price > orders.Price then
+result := 1;
+else
+result := 0;
+end if;
+end if;
+return result;
+end;
+end;
+​
