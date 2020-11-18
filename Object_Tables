@@ -1,0 +1,22 @@
+CREATE TABLE Insurance_t of Insurance (InsuranceID primary key);
+​
+CREATE TABLE Patient_t of Patient (PatientID primary key);
+​
+CREATE TABLE Patient_Account_t of Patient_Account (AccountID primary key);
+​
+CREATE TABLE Bill_t of Bill (BillNo primary key);
+​
+CREATE TABLE Cash_Payment_t of Cash_Payment (BillNo primary key);
+​
+CREATE TABLE Card_Payment_t  of Card_Payment (BillNo primary key); 
+​
+CREATE TABLE Medicine_Stock_t of Medicine_Stock (DrugCode primary key);
+​
+CREATE TABLE Prescription_t of Prescription (PrescriptionID primary key);
+​
+CREATE TABLE PrescriptionHandler_t of PrescriptionHandler (handlerID primary key); 
+​
+CREATE TABLE Supplier_t of Supplier (SupplyCompany primary key);
+​
+CREATE TABLE DrugOrder_t of DrugOrder (orderNo primary key);
+​
