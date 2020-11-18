@@ -11,4 +11,5 @@ To use this database, you must create it using the files contained in this order
  1) Create Types (Types)
  2) Create Type Bodies (Type_Body_Creation)
  3) Create Object Tables (Object_Tables)
+ 4) Populate tables through inserts (Data_Population)
  4) Use the queries (Query_Examples)
