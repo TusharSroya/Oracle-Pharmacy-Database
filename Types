@@ -1,23 +1,24 @@
 //Create Types
 
-create type Insurance as object (InsuranceID varchar2(10), InsuranceName varchar2(20), InsuranceContact char(10), InsurancePercentOff number(10));  ​
+create type Insurance as object (InsuranceID varchar2(10), InsuranceName varchar2(20), InsuranceContact char(10), InsurancePercentOff number(10));   
 ​
-create type Patient as object (PatientID varchar2(10), PatientName varchar2(20), BirthYear number(4), Patient_Gender char(1), PhoneNo char(10), Insurid ref Insurance, map member function mapPatient return integer);​
+create type Patient as object (PatientID varchar2(10), PatientName varchar2(20), BirthYear number(4), Patient_Gender char(1), PhoneNo char(10), Insurid ref Insurance, map member function mapPatient return integer); 
 ​
-create type Patient_Account as object (AccountID varchar2(10), pid ref Patient, BillingAdress varchar2(40), HomeAdress varchar2(50));
-​
-create type Bill as object (BillNo varchar2(10), pid ref Patient, TotalPrice number(6,2), billDate date, InsuranceOff number(10) , member function  getInsuranceReduce return number, member function calculatePatientPay return number) NOT FINAL;​
-​
-create type Card_Payment under Bill(CardType varchar2(10), CardNo varchar2(12));​
-​
-create type Cash_Payment under Bill(CashReceived number(6), CashPercentageOff number(6), member function getChange return number, overriding member fun
-​
-create type Medicine_Stock as object (DrugCode varchar2(10), DrugName varchar2(20), DrugPrice number(6,2), DrugQty integer, member function getDrugQty(drugCode in varchar2) return integer, member procedure updateStock(drugCode in varchar2, quantity in number)); ​
-​
-create type Prescription as object(PrescriptionID varchar2(10), pid REF Patient);​
-​
-create type  PrescriptionHandler as object(handlerID varchar2(10), prescribe ref Prescription, dcode ref Medicine_Stock, drugQuantity integer, Refills number(3),  RefillDate date, member function refillsLeft return number);​
-​
-create type Supplier as object (SupplyCompany varchar2(20), Address varchar2(20), LicenseNo varchar2(15), PhoneNo varchar2(12));​
-​
-create type DrugOrder as object(OrderNo varchar2(10), drugcode ref Medicine_Stock, OrderQty integer, Price number, OrderDate date, supplierName ref Supplier, order member function sortOrder(orders in DrugOrder) return integer);​
+create type Patient_Account as object (AccountID varchar2(10), pid ref Patient, BillingAdress varchar2(40), HomeAdress varchar2(50)); 
+ 
+create type Bill as object (BillNo varchar2(10), pid ref Patient, TotalPrice number(6,2), billDate date, InsuranceOff number(10) , member function  getInsuranceReduce return number, member function calculatePatientPay return number) NOT FINAL; 
+ 
+create type Card_Payment under Bill(CardType varchar2(10), CardNo varchar2(12)); 
+ 
+create type Cash_Payment under Bill(CashReceived number(6), CashPercentageOff number(6), member function getChange return number, overriding member function calculatePatientPay return number); 
+ 
+create type Medicine_Stock as object (DrugCode varchar2(10), DrugName varchar2(20), DrugPrice number(6,2), DrugQty integer,  
+member function getDrugQty(drugCode in varchar2) return integer, member procedure updateStock(drugCode in varchar2, quantity in number));  
+ 
+create type Prescription as object(PrescriptionID varchar2(10), pid REF Patient); 
+ 
+create type  PrescriptionHandler as object(handlerID varchar2(10), prescribe ref Prescription, dcode ref Medicine_Stock, drugQuantity integer, Refills number(3),  RefillDate date, member function refillsLeft return number); 
+ 
+create type Supplier as object (SupplyCompany varchar2(20), Address varchar2(20), LicenseNo varchar2(15), PhoneNo varchar2(12)); 
+ 
+create type DrugOrder as object(OrderNo varchar2(10), drugcode ref Medicine_Stock, OrderQty integer, Price number, OrderDate date, supplierName ref Supplier, member function getDiscount return number, member function getTotalPrice return number, order member function sortOrder(orders in DrugOrder) return integer);  
