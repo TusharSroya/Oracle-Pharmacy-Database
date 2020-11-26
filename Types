@@ -21,4 +21,4 @@ create type  PrescriptionHandler as object(handlerID varchar2(10), prescribe ref
  
 create type Supplier as object (SupplyCompany varchar2(20), Address varchar2(20), LicenseNo varchar2(15), PhoneNo varchar2(12)); 
  
-create type DrugOrder as object(OrderNo varchar2(10), drugcode ref Medicine_Stock, OrderQty integer, Price number, OrderDate date, supplierName ref Supplier, member function getDiscount return number, member function getTotalPrice return number, order member function sortOrder(orders in DrugOrder) return integer);  
+create type DrugOrder as object(OrderNo varchar2(10), drugcode ref Medicine_Stock, OrderQty integer, Price number, OrderDate date, supplierName ref Supplier, order member function sortOrder(orders in DrugOrder) return integer);
